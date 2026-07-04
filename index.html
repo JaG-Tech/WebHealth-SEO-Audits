@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Website Health Audits – Services</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:       #0E0E1A;
+    --slate:     #3B3B52;
+    --muted:     #6B6B85;
+    --border:    #E2E2EE;
+    --surface:   #F7F7FC;
+    --white:     #FFFFFF;
+    --accent:    #4F3FF0;
+    --accent2:   #7C3AED;
+    --green:     #059669;
+    --amber:     #D97706;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--white);
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #0E0E1A 0%, #1E1040 60%, #2D1B69 100%);
+    color: var(--white);
+    padding: 80px 40px 72px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 30%, rgba(124,58,237,0.25) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(79,63,240,0.2) 0%, transparent 50%);
+  }
+
+  .hero-inner { position: relative; max-width: 720px; margin: 0 auto; }
+
+  .eyebrow {
+    display: inline-block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #A78BFA;
+    background: rgba(167,139,250,0.12);
+    border: 1px solid rgba(167,139,250,0.3);
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 28px;
+  }
+
+  .hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(36px, 6vw, 58px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 span {
+    background: linear-gradient(90deg, #A78BFA, #60A5FA);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: 18px;
+    color: rgba(255,255,255,0.72);
+    max-width: 540px;
+    margin: 0 auto 40px;
+    line-height: 1.65;
+  }
+
+  .hero-cta {
+    display: inline-block;
+    background: linear-gradient(135deg, #4F3FF0, #7C3AED);
+    color: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 14px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    box-shadow: 0 4px 24px rgba(79,63,240,0.4);
+  }
+
+  /* ── TRUST BAR ── */
+  .trust-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 40px;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--slate);
+  }
+
+  .trust-item .dot {
+    width: 8px; height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── SECTIONS ── */
+  .section { padding: 72px 40px; max-width: 900px; margin: 0 auto; }
+
+  .section-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(26px, 4vw, 36px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+
+  .section-sub {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 600px;
+    margin-bottom: 48px;
+    line-height: 1.7;
+  }
+
+  /* ── SERVICES GRID ── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  .service-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 24px;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .service-card:hover {
+    border-color: #C4B5FD;
+    box-shadow: 0 8px 32px rgba(79,63,240,0.1);
+    transform: translateY(-2px);
+  }
+
+  .service-card:hover::before { opacity: 1; }
+
+  .service-icon {
+    font-size: 28px;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .service-card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+
+  .service-card p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+
+  .checks {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .checks li {
+    font-size: 13px;
+    color: var(--slate);
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+  }
+
+  .checks li::before {
+    content: '✓';
+    color: var(--green);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+  /* ── PACKAGES ── */
+  .packages { background: var(--surface); padding: 72px 40px; }
+  .packages-inner { max-width: 900px; margin: 0 auto; }
+
+  .packages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+    margin-top: 48px;
+  }
+
+  .package-card {
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .package-card.featured {
+    border-color: var(--accent);
+    background: linear-gradient(160deg, #F5F3FF, #EDE9FE);
+    box-shadow: 0 8px 40px rgba(79,63,240,0.15);
+    position: relative;
+  }
+
+  .featured-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+
+  .package-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .package-card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-top: -10px;
+  }
+
+  .package-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .package-includes {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .package-includes li {
+    font-size: 14px;
+    color: var(--slate);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .package-includes li::before {
+    content: '✓';
+    color: var(--green);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .package-cta {
+    display: block;
+    text-align: center;
+    background: var(--ink);
+    color: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+  }
+
+  .package-card.featured .package-cta {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    box-shadow: 0 4px 16px rgba(79,63,240,0.3);
+  }
+
+  /* ── WHAT YOU GET ── */
+  .deliverable-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .deliverable-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .deliverable-item .icon { font-size: 28px; margin-bottom: 10px; display: block; }
+
+  .deliverable-item h4 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  .deliverable-item p { font-size: 13px; color: var(--muted); }
+
+  /* ── PROCESS ── */
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0;
+    margin-top: 40px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .process-step {
+    padding: 28px 24px;
+    border-right: 1.5px solid var(--border);
+  }
+
+  .process-step:last-child { border-right: none; }
+
+  .step-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--border);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .process-step h4 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  .process-step p { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+  /* ── FOOTER CTA ── */
+  .footer-cta {
+    background: linear-gradient(135deg, #0E0E1A 0%, #1E1040 100%);
+    color: var(--white);
+    text-align: center;
+    padding: 72px 40px;
+  }
+
+  .footer-cta h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+
+  .footer-cta p {
+    font-size: 16px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 36px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .footer-cta a {
+    display: inline-block;
+    background: linear-gradient(135deg, #4F3FF0, #7C3AED);
+    color: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 14px 36px;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 4px 24px rgba(79,63,240,0.5);
+  }
+
+  .footer-note {
+    margin-top: 20px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.35);
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 60px 24px 56px; }
+    .section { padding: 56px 24px; }
+    .packages { padding: 56px 24px; }
+    .trust-bar { gap: 20px; padding: 18px 24px; }
+    .process-steps { grid-template-columns: 1fr 1fr; }
+    .process-step { border-right: none; border-bottom: 1.5px solid var(--border); }
+    .process-step:last-child { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">Website Health Audits</span>
+    <h1>Your website might be<br><span>losing you customers</span></h1>
+    <p>I audit small business websites for security vulnerabilities, SEO gaps, and performance issues — and deliver a plain-English report with exactly what to fix.</p>
+    <a href="mailto:hello@youremail.com" class="hero-cta">Request a Free Quote</a>
+  </div>
+</header>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item"><span class="dot"></span> 7-phase audit process</div>
+  <div class="trust-item"><span class="dot"></span> Delivered in 3–5 business days</div>
+  <div class="trust-item"><span class="dot"></span> No jargon — plain English reports</div>
+  <div class="trust-item"><span class="dot"></span> Security + SEO + Performance</div>
+</div>
+
+<!-- SERVICES -->
+<section class="section">
+  <div class="section-label">What I Check</div>
+  <h2 class="section-title">A complete picture of your website's health</h2>
+  <p class="section-sub">Most website audits only look at one thing. I run seven phases so you know exactly where you stand — and what to do about it.</p>
+
+  <div class="services-grid">
+
+    <div class="service-card">
+      <span class="service-icon">🔒</span>
+      <h3>Security Audit</h3>
+      <p>Find vulnerabilities before attackers do.</p>
+      <ul class="checks">
+        <li>HTTPS & SSL certificate status</li>
+        <li>Security headers analysis</li>
+        <li>Exposed files & directories</li>
+        <li>Admin panel & login security</li>
+        <li>CMS & plugin vulnerability check</li>
+      </ul>
+    </div>
+
+    <div class="service-card">
+      <span class="service-icon">🔍</span>
+      <h3>SEO Audit</h3>
+      <p>Fix what's stopping Google from ranking you.</p>
+      <ul class="checks">
+        <li>Title tags & meta descriptions</li>
+        <li>H1, H2 heading structure</li>
+        <li>robots.txt & XML sitemap</li>
+        <li>Canonical tags & redirects</li>
+        <li>Internal linking health</li>
+      </ul>
+    </div>
+
+    <div class="service-card">
+      <span class="service-icon">⚡</span>
+      <h3>Performance Review</h3>
+      <p>Slow sites lose visitors. Find out where you're losing them.</p>
+      <ul class="checks">
+        <li>Google PageSpeed scores</li>
+        <li>Core Web Vitals (LCP, INP, CLS)</li>
+        <li>Image optimization check</li>
+        <li>JavaScript & CSS audit</li>
+        <li>Caching & compression check</li>
+      </ul>
+    </div>
+
+    <div class="service-card">
+      <span class="service-icon">📱</span>
+      <h3>Mobile Experience</h3>
+      <p>Over 60% of traffic is mobile. Make sure it works.</p>
+      <ul class="checks">
+        <li>Responsive design check</li>
+        <li>Navigation usability</li>
+        <li>Button & tap target sizing</li>
+        <li>Text readability</li>
+        <li>Image scaling</li>
+      </ul>
+    </div>
+
+    <div class="service-card">
+      <span class="service-icon">♿</span>
+      <h3>Accessibility Audit</h3>
+      <p>Reach more customers and reduce legal risk.</p>
+      <ul class="checks">
+        <li>WAVE & Lighthouse scanning</li>
+        <li>Color contrast check</li>
+        <li>Image alt text review</li>
+        <li>Keyboard navigation</li>
+        <li>Form label verification</li>
+      </ul>
+    </div>
+
+    <div class="service-card">
+      <span class="service-icon">📍</span>
+      <h3>Local SEO Check</h3>
+      <p>For local businesses that need to show up in their area.</p>
+      <ul class="checks">
+        <li>NAP consistency (Name, Address, Phone)</li>
+        <li>Google Business Profile review</li>
+        <li>Clickable phone numbers</li>
+        <li>Location map embedded</li>
+        <li>Business hours & reviews visible</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PACKAGES -->
+<div class="packages">
+  <div class="packages-inner">
+    <div class="section-label">Packages</div>
+    <h2 class="section-title">Choose the right audit for your site</h2>
+    <p class="section-sub">Every package includes a full written report with color-coded findings and plain-English recommendations.</p>
+
+    <div class="packages-grid">
+
+      <div class="package-card">
+        <div class="package-name">Starter</div>
+        <h3>SEO + Performance</h3>
+        <p class="package-desc">Best for small sites that want to rank better and load faster.</p>
+        <ul class="package-includes">
+          <li>Full SEO audit</li>
+          <li>PageSpeed & Core Web Vitals</li>
+          <li>Mobile experience check</li>
+          <li>Written report with recommendations</li>
+        </ul>
+        <a href="mailto:hello@youremail.com" class="package-cta">Get a Quote</a>
+      </div>
+
+      <div class="package-card featured">
+        <span class="featured-badge">Most Popular</span>
+        <div class="package-name">Standard</div>
+        <h3>Full Site Health</h3>
+        <p class="package-desc">The complete audit — security, SEO, performance, and accessibility.</p>
+        <ul class="package-includes">
+          <li>Security audit (all phases)</li>
+          <li>Full SEO audit</li>
+          <li>PageSpeed & Core Web Vitals</li>
+          <li>Mobile experience check</li>
+          <li>Accessibility (WAVE + Lighthouse)</li>
+          <li>Color-coded report with severity ratings</li>
+        </ul>
+        <a href="mailto:hello@youremail.com" class="package-cta">Get a Quote</a>
+      </div>
+
+      <div class="package-card">
+        <div class="package-name">Local Business</div>
+        <h3>Local SEO Bundle</h3>
+        <p class="package-desc">Everything in Standard, plus local SEO checks for brick-and-mortar businesses.</p>
+        <ul class="package-includes">
+          <li>Everything in Standard</li>
+          <li>Local SEO audit</li>
+          <li>Google Business Profile review</li>
+          <li>NAP consistency check</li>
+          <li>Priority recommendations for local rankings</li>
+        </ul>
+        <a href="mailto:hello@youremail.com" class="package-cta">Get a Quote</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- DELIVERABLES -->
+<section class="section">
+  <div class="section-label">Deliverables</div>
+  <h2 class="section-title">What you get when the audit is done</h2>
+  <p class="section-sub">Every audit delivers a clear, actionable report — no raw data dumps, no confusing spreadsheets.</p>
+
+  <div class="deliverable-grid">
+    <div class="deliverable-item">
+      <span class="icon">📄</span>
+      <h4>Full Written Report</h4>
+      <p>Structured findings across every phase of the audit</p>
+    </div>
+    <div class="deliverable-item">
+      <span class="icon">🟢</span>
+      <h4>Color-Coded Scorecard</h4>
+      <p>Pass, Warning, and Fail ratings at a glance</p>
+    </div>
+    <div class="deliverable-item">
+      <span class="icon">🎯</span>
+      <h4>Severity Ratings</h4>
+      <p>Critical, Medium, and Low — so you know what to fix first</p>
+    </div>
+    <div class="deliverable-item">
+      <span class="icon">🛠</span>
+      <h4>Fix Recommendations</h4>
+      <p>Plain-English steps your developer can act on immediately</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PROCESS -->
+<section class="section">
+  <div class="section-label">How It Works</div>
+  <h2 class="section-title">Simple process, fast turnaround</h2>
+
+  <div class="process-steps">
+    <div class="process-step">
+      <span class="step-num">01</span>
+      <h4>You Share Your URL</h4>
+      <p>Send me your website and tell me which package you want.</p>
+    </div>
+    <div class="process-step">
+      <span class="step-num">02</span>
+      <h4>I Run the Audit</h4>
+      <p>I run all checks manually and with professional tools.</p>
+    </div>
+    <div class="process-step">
+      <span class="step-num">03</span>
+      <h4>Report Delivered</h4>
+      <p>You receive your full report within 3–5 business days.</p>
+    </div>
+    <div class="process-step">
+      <span class="step-num">04</span>
+      <h4>Questions Answered</h4>
+      <p>I walk you through the findings and answer any questions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER CTA -->
+<footer class="footer-cta">
+  <h2>Ready to see what's holding your site back?</h2>
+  <p>Send me your URL and I'll get back to you within 24 hours with a quote.</p>
+  <a href="mailto:hello@youremail.com">Request Your Audit</a>
+  <p class="footer-note">No commitment required. Free quote for every request.</p>
+</footer>
+
+</body>
+</html>
