@@ -1,0 +1,11 @@
+name = "jag-tech-quote-api"
+main = "worker.js"
+compatibility_date = "2026-11-01"
+
+[vars]
+ALLOWED_ORIGIN = "https://jag-tech.github.io"
+TO_EMAIL = "jaydenaj2003@gmail.com"
+# Must be a sender verified in Resend, e.g. "JAG Tech <quotes@yourdomain.com>"
+FROM_EMAIL = "JAG Tech <onboarding@resend.dev>"
+
+# Secret (do not put here):  npx wrangler secret put RESEND_API_KEY

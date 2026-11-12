@@ -229,6 +229,25 @@
     .checks, .price-grid, .builds-grid, .process{grid-template-columns:1fr;}
     nav{display:none;}
   }
+
+  /* QUOTE FORM */
+  #quote-form{max-width:520px; margin:0 auto; text-align:left; display:grid; gap:14px;}
+  #quote-form label{font-family:var(--mono); font-size:12px; color:var(--text-dim); display:grid; gap:6px;}
+  #quote-form input, #quote-form select, #quote-form textarea{
+    font:inherit; font-family:var(--sans); font-size:15px;
+    background:var(--bg-panel); color:var(--text);
+    border:1px solid var(--line); border-radius:6px; padding:11px 12px;
+  }
+  #quote-form input:focus, #quote-form select:focus, #quote-form textarea:focus{
+    outline:2px solid var(--pass); outline-offset:1px;
+  }
+  #quote-form textarea{min-height:110px; resize:vertical;}
+  #quote-form .hp{position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden;}
+  #quote-form button{cursor:pointer;}
+  #quote-form button:disabled{opacity:.6; cursor:wait;}
+  #quote-status{min-height:22px; font-size:14px; text-align:center;}
+  #quote-status.ok{color:var(--pass);}
+  #quote-status.err{color:var(--fail);}
 </style>
 </head>
 <body>
@@ -445,13 +464,90 @@
   <div class="wrap">
     <h2>Ready to see what's holding your site back?</h2>
     <p>Send me your URL and I'll get back to you within 24 hours with a quote. No commitment required.</p>
-    <a class="btn btn-primary" href="mailto:jaydenaj2003@gmail.com">Request Your Audit</a>
+    <form id="quote-form" novalidate>
+      <label>Name
+        <input type="text" name="name" autocomplete="name" maxlength="100" required>
+      </label>
+      <label>Email
+        <input type="email" name="email" autocomplete="email" maxlength="200" required>
+      </label>
+      <label>Your website (optional)
+        <input type="url" name="url" placeholder="https://" maxlength="300">
+      </label>
+      <label>Package
+        <select name="package">
+          <option>Not sure yet</option>
+          <option>Starter audit</option>
+          <option>Standard audit</option>
+          <option>Local Business Bundle</option>
+          <option>Website build</option>
+          <option>Build + audit bundle</option>
+        </select>
+      </label>
+      <label>Message (optional)
+        <textarea name="message" maxlength="2000"></textarea>
+      </label>
+      <div class="hp" aria-hidden="true">
+        <label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+      </div>
+      <button class="btn btn-primary" type="submit">Request Your Audit</button>
+      <div id="quote-status" role="status" aria-live="polite"></div>
+    </form>
+    <noscript><p>Or email me directly: <a href="mailto:jaydenaj2003@gmail.com">jaydenaj2003@gmail.com</a></p></noscript>
   </div>
 </section>
 
 <footer>
   JAG TECH — Website Health & SEO Audits
 </footer>
+
+<script>
+  // After deploying the Worker in /api, paste its URL here (must end in /quote).
+  const QUOTE_API_URL = "";
+
+  const form = document.getElementById("quote-form");
+  const statusEl = document.getElementById("quote-status");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = form.querySelector("button");
+    const data = Object.fromEntries(new FormData(form));
+
+    if (!data.name.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) {
+      statusEl.className = "err";
+      statusEl.textContent = "Please enter your name and a valid email.";
+      return;
+    }
+    if (!QUOTE_API_URL) {
+      // API not deployed yet: fall back to email.
+      window.location.href = "mailto:jaydenaj2003@gmail.com?subject=" +
+        encodeURIComponent("Quote request: " + data.name) +
+        "&body=" + encodeURIComponent(`${data.message}\n\nSite: ${data.url}\nPackage: ${data.package}\nFrom: ${data.email}`);
+      return;
+    }
+
+    btn.disabled = true;
+    statusEl.className = "";
+    statusEl.textContent = "Sending…";
+    try {
+      const res = await fetch(QUOTE_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const out = await res.json();
+      if (!res.ok || !out.ok) throw new Error(out.error || "Something went wrong.");
+      form.reset();
+      statusEl.className = "ok";
+      statusEl.textContent = "Thanks! I'll get back to you within 24 hours.";
+    } catch (err) {
+      statusEl.className = "err";
+      statusEl.textContent = err.message || "Couldn't send. Please email me directly.";
+    } finally {
+      btn.disabled = false;
+    }
+  });
+</script>
 
 </body>
 </html>
