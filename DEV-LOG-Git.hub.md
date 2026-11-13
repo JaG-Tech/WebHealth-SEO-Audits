@@ -1,11 +1,11 @@
 # Dev Log: <site name>
 
-Repo: github.com/JaG-Tech/<repo> | Live site: <url> | Host: GitHub Pages
+Repo: github.com/JaG-Tech/<repo> | Live site: <https://jag-tech.github.io/WebHealth-SEO-Audits/#builds> | Host: GitHub Pages
 
 ## Open Problems
 | # | Date found | Problem | Where (page/file) | Severity | Status |
 |---|-----------|---------|-------------------|----------|--------|
-| 1 |           |         |                   | Low/Med/High | Open |
+| 1 |     11/12/26      |   No API integration      |        last page of website           | Low | Closed |
 
 ## Fixes & Solutions (newest first)
 ### YYYY-MM-DD: short title
